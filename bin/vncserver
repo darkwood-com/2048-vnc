@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Options:
+PASSWORD="azertyui"
+DISPLAY=":1"
+VNCSERVER_OPTIONS="-geometry 600x800 -depth 24"
+VNC_PATH="$HOME/.vnc"
+PASSWD_PATH="$VNC_PATH/passwd"
+XSTARTUP_PATH="$VNC_PATH/xstartup"
+VNCSERVER="tightvncserver"
+VNCPASSWD="tightvncpasswd"
+# NOTE: you can change `tightvncpasswd` by `vncpasswd` if you don't use
+#       TightVNC but it won't work in some VNC implementations
+NEW_SESSION="exec gnome-session"
+
+vncserver_stop() {
+    # Kill server for this display if is running
+    $VNCSERVER -clean -kill $DISPLAY
+}
+
+vncserver_start() {
+    mkdir -p "$VNC_PATH"
+    echo "$PASSWORD" | $VNCPASSWD -f > $PASSWD_PATH
+    chmod 600 $PASSWD_PATH
+    #echo "$NEW_SESSION" > $XSTARTUP_PATH
+    $VNCSERVER $DISPLAY $VNCSERVER_OPTIONS
+    
+    #tightvncserver :1 -geometry 1280x800 -depth 24 && tail -F /root/.vnc/*.log
+}
+
+case "$1" in
+    start)
+        vncserver_start
+    ;;
+
+    stop)
+        vncserver_stop
+    ;;
+
+    restart)
+        vncserver_stop
+        vncserver_start
+    ;;
+
+    *)
+        echo "Usage: $0 <start|stop|restart>"
+        exit 1
+esac

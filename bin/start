@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/usr/local/bin/vncserver start
+/etc/init.d/nginx start
+firefox --display=":1" --profile "/home/firefox/firefox-profile" localhost
