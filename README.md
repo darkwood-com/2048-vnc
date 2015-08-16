@@ -1,4 +1,4 @@
-# docker-2048-vnc
+# 2048-vnc
 
 A docker version of 2048 on VNC (600x800)
 
